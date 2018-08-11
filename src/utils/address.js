@@ -1,0 +1,91 @@
+import Serializable from './serializable'
+import BufferUtils from './bufferUtils'
+import SerialBuffer from './serialBuffer'
+
+class Address extends Serializable {
+  constructor (arg) {
+    super()
+    if (!(arg instanceof Uint8Array)) throw new Error('Primitive: Invalid type')
+    if (arg.length !== Address.SERIALIZED_SIZE) throw new Error('Primitive: Invalid length')
+    this._obj = arg
+  }
+
+  static fromHash (hash) {
+    return new Address(hash.subarray(0, Address.SERIALIZED_SIZE))
+  }
+
+  static unserialize (buf) {
+    return new Address(buf.read(Address.SERIALIZED_SIZE))
+  }
+
+  static fromBase64 (base64) {
+    return new Address(BufferUtils.fromBase64(base64))
+  }
+
+  static fromHex (hex) {
+    return new Address(BufferUtils.fromHex(hex))
+  }
+
+  static fromUserFriendlyAddress (str) {
+    str = str.replace(/ /g, '')
+    if (str.substr(0, 2).toUpperCase() !== Address.CCODE) {
+      throw new Error('Invalid Address: Wrong country code')
+    }
+    if (str.length !== 36) {
+      throw new Error('Invalid Address: Should be 36 chars (ignoring spaces)')
+    }
+    if (Address._ibanCheck(str.substr(4) + str.substr(0, 4)) !== 1) {
+      throw new Error('Invalid Address: Checksum invalid')
+    }
+    return new Address(BufferUtils.fromBase32(str.substr(4)))
+  }
+
+  static _ibanCheck (str) {
+    const num = str.split('').map((c) => {
+      const code = c.toUpperCase().charCodeAt(0)
+      return code >= 48 && code <= 57 ? c : (code - 55).toString()
+    }).join('')
+    let tmp = ''
+
+    for (let i = 0; i < Math.ceil(num.length / 6); i++) {
+      tmp = (parseInt(tmp + num.substr(i * 6, 6)) % 97).toString()
+    }
+
+    return parseInt(tmp)
+  }
+
+  get serializedSize () {
+    return Address.SERIALIZED_SIZE
+  }
+
+  serialize (buf) {
+    buf = buf || new SerialBuffer(this.serializedSize)
+    buf.write(this._obj)
+    return buf
+  }
+
+  subarray (begin, end) {
+    return this._obj.subarray(begin, end)
+  }
+
+  equals (o) {
+    return o instanceof Address &&
+          super.equals(o)
+  }
+
+  toUserFriendlyAddress (withSpaces = true) {
+    const base32 = BufferUtils.toBase32(this.serialize())
+    // eslint-disable-next-line prefer-template
+    const check = ('00' + (98 - Address._ibanCheck(base32 + Address.CCODE + '00'))).slice(-2)
+    let res = Address.CCODE + check + base32
+    if (withSpaces) res = res.replace(/.{4}/g, '$& ').trim()
+    return res
+  }
+}
+Address.CCODE = 'NQ'
+Address.SERIALIZED_SIZE = 20
+Address.HEX_SIZE = 40
+Address.NULL = new Address(new Uint8Array(Address.SERIALIZED_SIZE))
+Address.CONTRACT_CREATION = new Address(new Uint8Array(Address.SERIALIZED_SIZE))
+
+export default Address
