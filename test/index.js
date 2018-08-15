@@ -6,9 +6,9 @@ const seed = '8f8008e763cf691e2c7a2ca4027ec7a180d4f3d6df7f5c49ee1f0ab1599ae8172c
 const myWallet = NimiqWallet.fromMasterKey(seed)
 const tx = myWallet.generateTransaction({
   to: 'NQ49 GMD0 FDKS 9HTY DQQ7 M8D4 P2TN 5CN0 TDU9',
-  value: 50000,
+  value: 10000,
   fee: 0,
-  height: 170619
+  height: 173976
 })
 
 describe('Nimiq Wallet', function () {
@@ -20,7 +20,7 @@ describe('Nimiq Wallet', function () {
   it('Can generate tx', () => {
     const hex = tx.toHex()
     const txId = tx.hash()
-    assert.strictEqual(hex, '002ce617a9aef427f4c294cfb3c79ff0264a835ef2c48a62ba5e68e271a1746075855a07b67a4c77f6e307aa1a4b8b762b2c0db789000000000000c350000000000000000000029a7b2a13c3f304b827247f6ec70c5a3e293fe0c47500004953a5807632b5587247c809382950ed77a8131c5834110575ba613d88f0972245b1ea9f122fbcad9302d005')
-    assert.strictEqual(txId, '276538c25768846401da051e75f0ffa4f3bdc4ec5cb9573e4866cce8017a019e')
+    assert.strictEqual(hex, '002ce617a9aef427f4c294cfb3c79ff0264a835ef2c48a62ba5e68e271a1746075855a07b67a4c77f6e307aa1a4b8b762b2c0db789000000000000271000000000000000000002a7982adbe9a28e061872b8dbe5ce2b951a3078ce8571366504d37eace43e402aaf330438c98f8da9a571fcfdafa246cf07756577fb43f3ce9b77a4d85d7cb14c312703')
+    assert.strictEqual(txId, '8b1c56c9ea0796f1c3f5b651b2d07a6ecb2fc3c6898f15ba792d29ecc3da6ba2')
   })
 })

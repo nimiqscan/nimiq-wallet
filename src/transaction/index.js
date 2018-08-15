@@ -3,6 +3,7 @@ import NumberUtils from '../utils/numberUtils'
 import SerialBuffer from '../utils/serialBuffer'
 import BufferUtils from '../utils/bufferUtils'
 import Hash from '../utils/hash'
+import './extendedTransaction'
 
 const GenesisConfig = {
   'main': {

@@ -45,6 +45,11 @@ class BasicTransaction extends Transaction {
   }
 
   static unserialize (buf) {
+    const type = buf.readUint8()
+    if (type !== Transaction.Format.BASIC) {
+      throw new Error('invalid transaction type')
+    }
+
     const senderPubKey = PublicKey.unserialize(buf)
     const recipient = Address.unserialize(buf)
     const value = buf.readUint64()
