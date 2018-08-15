@@ -3,6 +3,7 @@ import SignatureProof from '../utils/sigProof'
 import BasicTransaction from '../transaction/basicTransaction'
 import KeyPair from '../utils/keyPair'
 import Address from '../utils/address'
+import '../transaction/extendedTransaction'
 
 class Wallet {
   static async generate () {
