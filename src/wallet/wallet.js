@@ -4,6 +4,9 @@ import BasicTransaction from '../transaction/basicTransaction'
 import KeyPair from '../utils/keyPair'
 import Address from '../utils/address'
 import '../transaction/extendedTransaction'
+const EdDSA = require('elliptic').eddsa
+const ec = new EdDSA('ed25519')
+const bip39 = require('bip39')
 
 class Wallet {
   static async generate () {
@@ -13,6 +16,14 @@ class Wallet {
   static fromMasterKey (seed) {
     const key = KeyPair.fromHex(seed)
     return new Wallet(key)
+  }
+
+  static fromMnemonic (mnemonic) {
+    const seed = bip39.mnemonicToSeedHex(mnemonic)
+    const privateKeyHex = seed.substr(0, 64)
+    const publicKeyArray = ec.keyFromSecret(privateKeyHex).getPublic()
+    const publicKeyHex = Buffer.from(publicKeyArray).toString('hex')
+    return Wallet.fromMasterKey(privateKeyHex + publicKeyHex)
   }
 
   constructor (keyPair) {

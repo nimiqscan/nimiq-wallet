@@ -3,6 +3,7 @@ import Address from './utils/address'
 import BufferUtils from './utils/bufferUtils'
 import SerialBuffer from './utils/serialBuffer'
 import Transaction from './transaction/index'
+import KeyPair from './utils/keyPair'
 import BasicTransaction from './transaction/basicTransaction'
 
 export {
@@ -10,7 +11,8 @@ export {
   BufferUtils,
   Transaction,
   BasicTransaction,
-  SerialBuffer
+  SerialBuffer,
+  KeyPair
 }
 
 export default NimiqWallet
