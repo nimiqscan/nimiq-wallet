@@ -1,6 +1,7 @@
 import resolve from 'rollup-plugin-node-resolve'
 import commonjs from 'rollup-plugin-commonjs'
 import json from 'rollup-plugin-json'
+import babel from 'rollup-plugin-babel'
 import pkg from './package.json'
 
 export default [
@@ -12,6 +13,9 @@ export default [
       format: 'umd'
     },
     plugins: [
+      babel({
+        exclude: 'node_modules/**'
+      }),
       resolve(),
       commonjs(),
       json()
