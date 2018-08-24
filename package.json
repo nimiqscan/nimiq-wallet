@@ -1,6 +1,6 @@
 {
   "name": "nimiqscan-wallet",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Offline Nimiq Wallet in pure JavaScript",
   "main": "dist/index.cjs.js",
   "module": "dist/index.esm.js",
