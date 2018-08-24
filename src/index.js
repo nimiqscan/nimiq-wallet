@@ -5,6 +5,7 @@ import SerialBuffer from './utils/serialBuffer'
 import Transaction from './transaction/index'
 import KeyPair from './utils/keyPair'
 import BasicTransaction from './transaction/basicTransaction'
+import bip39 from 'bip39'
 
 export {
   Address,
@@ -12,7 +13,8 @@ export {
   Transaction,
   BasicTransaction,
   SerialBuffer,
-  KeyPair
+  KeyPair,
+  bip39
 }
 
 export default NimiqWallet
